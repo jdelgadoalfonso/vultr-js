@@ -1,0 +1,14 @@
+{
+  "name": "vultr-js",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/index.js",
+  "author": "Jose Antonio Delgado Alfonso <jose.delgado@galgus.net>",
+  "license": "MIT",
+  "dependencies": {
+    "neon-cli": "^0.1.23"
+  },
+  "scripts": {
+    "install": "neon build && strip -s ./native/index.node"
+  }
+}

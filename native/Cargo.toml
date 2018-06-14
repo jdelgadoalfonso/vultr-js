@@ -1,0 +1,38 @@
+[package]
+name = "vultr-neon"
+version = "0.1.0"
+authors = ["Jose Antonio Delgado Alfonso <jose.delgado@galgus.net>"]
+license = "MIT"
+build = "build.rs"
+
+[lib]
+name = "vultr_neon"
+crate-type = ["dylib"]
+
+[build-dependencies]
+neon-build = "0.1.23"
+
+[dependencies]
+neon = "0.1.23"
+neon-serde = "0.0.3"
+vultrapi = { git = "https://github.com/jdelgadoalfonso/vultrapi-rs.git" }
+
+[profile.dev]
+opt-level        = 0
+debug            = true
+rpath            = false
+lto              = false
+debug-assertions = true
+codegen-units    = 1
+overflow-checks  = true
+panic            = 'unwind'
+
+[profile.release]
+opt-level        = 3
+debug            = false
+rpath            = false
+lto              = true
+debug-assertions = false
+codegen-units    = 1
+overflow-checks  = false
+panic            = 'unwind'
