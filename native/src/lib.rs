@@ -17,9 +17,18 @@ fn servers(call: Call) -> JsResult<JsValue> {
         .downcast::<JsString>().unwrap().value();
     let vultr_mgr = VultrMgr::with_api_key(&api_key);
 
-    match vultr_mgr.servers().retrieve() {
-        Ok(servers_res) => Ok(neon_serde::to_value(scope, &servers_res).unwrap()),
-        Err(e) => JsError::throw(Kind::Error, &format!("{:?}", e)),
+    if let Some(server_id) = call.arguments.get(scope, 0) {
+        match vultr_mgr.server_by_filter(
+            server_id.downcast::<JsString>().unwrap().value().as_str()
+        ).retrieve() {
+            Ok(servers_res) => Ok(neon_serde::to_value(scope, &servers_res).unwrap()),
+            Err(e) => JsError::throw(Kind::Error, &format!("{:?}", e)),
+        }
+    } else {
+        match vultr_mgr.servers().retrieve() {
+            Ok(servers_res) => Ok(neon_serde::to_value(scope, &servers_res).unwrap()),
+            Err(e) => JsError::throw(Kind::Error, &format!("{:?}", e)),
+        }
     }
 }
 
