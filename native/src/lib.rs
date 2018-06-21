@@ -53,6 +53,7 @@ fn create_server(call: Call) -> JsResult<JsValue> {
         hostname: Some(&hostname.downcast::<JsString>().unwrap().value()),
         label: Some(&label.downcast::<JsString>().unwrap().value()),
         tag: Some(&tag.downcast::<JsString>().unwrap().value()),
+        enable_private_network: Some(true),
     }).retrieve() {
         Ok(server_res) => Ok(neon_serde::to_value(scope, &server_res).unwrap()),
         Err(e) => JsError::throw(Kind::Error, &format!("{:?}", e)),
@@ -102,6 +103,22 @@ fn reboot_server(call: Call) -> JsResult<JsValue> {
     let server_id = call.arguments.get(scope, 0).unwrap();
 
     match vultr_mgr.servers().reboot(
+        &server_id.downcast::<JsString>().unwrap().value()
+    ).retrieve() {
+        Ok(server_res) => Ok(neon_serde::to_value(scope, &server_res).unwrap()),
+        Err(e) => JsError::throw(Kind::Error, &format!("{:?}", e)),
+    }
+}
+
+fn start_server(call: Call) -> JsResult<JsValue> {
+    let scope = call.scope;
+    let api_key = scope.global().get(scope, "API_KEY").unwrap()
+        .downcast::<JsString>().unwrap().value();
+    let vultr_mgr = VultrMgr::with_api_key(&api_key);
+
+    let server_id = call.arguments.get(scope, 0).unwrap();
+
+    match vultr_mgr.servers().start(
         &server_id.downcast::<JsString>().unwrap().value()
     ).retrieve() {
         Ok(server_res) => Ok(neon_serde::to_value(scope, &server_res).unwrap()),
@@ -201,6 +218,7 @@ register_module!(m, {
     m.export("regions", regions)?;
     m.export("servers", servers)?;
     m.export("snapshots", snapshots)?;
+    m.export("startServer", start_server)?;
     m.export("upgradeServerPlan", upgrade_server_plan)?;
     m.export("upgradeServerPlanList", upgrade_server_plan_list)?;
     Ok(())
