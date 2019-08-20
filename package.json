@@ -9,6 +9,6 @@
     "neon-cli": "^0.2.0"
   },
   "scripts": {
-    "install": "neon build && strip -s ./native/index.node"
+    "install": "neon build --release && strip -s ./native/index.node"
   }
 }
