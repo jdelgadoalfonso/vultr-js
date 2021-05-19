@@ -20,7 +20,7 @@ fn servers(call: Call) -> JsResult<JsValue> {
     if let Some(server_id) = call.arguments.get(scope, 0) {
         match vultr_mgr.server_by_filter(
             server_id.downcast::<JsString>().unwrap().value().as_str()
-        ).retrieve() {
+        ).retrieve_json() {
             Ok(servers_res) => Ok(neon_serde::to_value(scope, &servers_res).unwrap()),
             Err(e) => JsError::throw(Kind::Error, &format!("{:?}", e)),
         }
