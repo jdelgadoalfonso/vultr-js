@@ -15,7 +15,7 @@ neon-build = "0.1.23"
 [dependencies]
 neon = "0.1.23"
 neon-serde = "0.0.3"
-vultrapi = { git = "https://github.com/jdelgadoalfonso/vultrapi-rs.git", rev = "d43a0ff" }
+vultrapi = { git = "https://github.com/jdelgadoalfonso/vultrapi-rs.git", rev = "cab2fca" }
 
 [profile.dev]
 opt-level        = 0
